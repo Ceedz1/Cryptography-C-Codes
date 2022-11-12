@@ -4,11 +4,15 @@
 #include <ctype.h>
 #include <conio.h>
 
+
+//Encrypt Function---------------------------------------------------
 char* encptFunc(char plaintext[], int shftCount){
     int i;
 
+    //Dynamically Allocating "encrypted"
     char *encrypted = calloc(strlen(plaintext), sizeof(char));
 
+    //SHIFTING
     for(i = 0; i < strlen(plaintext); i++){
       if(isalnum(plaintext[i])){
         if(islower(plaintext[i])){
@@ -21,20 +25,20 @@ char* encptFunc(char plaintext[], int shftCount){
           encrypted[i] = (plaintext[i] - '0' + shftCount) % 10 + '0';
         }
       }
-    }
-
+    } 
     
-    
+    //returning encrypted value
     return encrypted;
-    
 }
 
-
+//Decrypt Function---------------------------------------------------
 char* decptFunc(char encrypt[], int shftCount){
     int i;
 
+    //Dynamically Allocating "decrypted"
     char *decrypted = calloc(strlen(encrypt), sizeof(char));
 
+    //SHIFTING
     for(i = 0; i < strlen(encrypt); i++){
       if(isalnum(encrypt[i])){
         if(islower(encrypt[i])){
@@ -48,10 +52,11 @@ char* decptFunc(char encrypt[], int shftCount){
         }
       }
     }
+    //returning decrypted value
     return decrypted;
 }
 
-
+//Main Function---------------------------------------------------
 int main(){
   int choose, shftCount = 0;
   char plaintext[100];
@@ -94,9 +99,13 @@ int main(){
       
       //case 2: will decrypt
       case 2:
-        printf("\nEncrypted Value:\n%s\n", encrypt);
         strcpy(decrypt, decptFunc(encrypt, shftCount));
-        printf("Decrypted Value:\n%s", decrypt);
+        system("cls");
+        printf("Decrypted Value:\n%s\n\n", decrypt);
+
+        printf("Press any key to continue...");
+        getch();
+        system("cls");
       default:
         break;
     }
