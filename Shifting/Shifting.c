@@ -22,7 +22,11 @@ char* encptFunc(char plaintext[], int shftCount){
         }
       }
     }
+
+    
+    
     return encrypted;
+    
 }
 
 
@@ -55,25 +59,40 @@ int main(){
   char decrypt[100];
 
   do{
+
+    //Main Operation Menu
     printf("\n\nShifting Cryptography\n");
     printf("==========================\n");
     printf("[0] Exit\n");
     printf("[1] Encrypt\n");
     printf("[2] Decrypt\n");
     printf("==========================\n");
+
+    //Initialize "Choose" according to the operation menu
     printf("Enter Operation to Begin: ");
     scanf("%d", &choose);
 
+    //switch case according to "choose"
     switch(choose){
+      //case 1: will encrypt
       case 1:
+        //initialize (Plain Text) and (Shift Count)
         fflush(stdin);
         printf("\nEnter Plaintext: \n");
         gets(plaintext);
         printf("Enter shift count: ");
         scanf("%d", &shftCount);
+
+        //Initialize array "encrypt" to the return value of "encptFunc"
         strcpy(encrypt, encptFunc(plaintext, shftCount));
-        printf("Encrypted Value:\n%s", encrypt);
+        printf("Encrypted Value:\n%s\n\n", encrypt);
+
+        printf("Press any key to continue...");
+        getch();
+        system("cls");
         break;
+      
+      //case 2: will decrypt
       case 2:
         printf("\nEncrypted Value:\n%s\n", encrypt);
         strcpy(decrypt, decptFunc(encrypt, shftCount));
