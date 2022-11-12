@@ -4,7 +4,7 @@
 #include <conio.h>
 
 char* encptFunc(char plainText[], char key[]){
-    printf("Hello World");
+    
 
 }
 
@@ -28,7 +28,7 @@ int main(){
                 printf("\nEnter Plaint Text:\n");
                 fflush(stdin);
                 gets(plainText);
-                printf("\nEnter Key:\n");
+                printf("Enter Key:\n");
                 gets(key);
                 system("cls");
                 strcpy(encpt, encptFunc(plainText, key));
