@@ -9,6 +9,8 @@ char* funcEncpt(char plaintext[]){
   int i, a;
   char ch;
 
+  // FILE *fptr;
+
   //dynamically allocating "encrypted"
   char* encrypted = malloc(sizeof(encrypted)*sizeof(char*));
 
@@ -69,7 +71,8 @@ int main(){
       //Case 1: Will send "plaintext" to "funcEncpt"
       case 1:
         fflush(stdin);
-        printf("\nEnter Plaintext:\n");
+        printf("\nPlease use UPPERCASE");
+        printf("\nEnter Plain text:\n");
         gets(plaintext);
         strcpy(encpt, funcEncpt(plaintext));
         printf("Encrypted Value:\n%s", encpt);
