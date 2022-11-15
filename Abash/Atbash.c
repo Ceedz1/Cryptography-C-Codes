@@ -83,6 +83,7 @@ int main(){
         printf("\nEncrypted Value:\n%s\n", encpt);
         strcpy(decpt, funcEncpt(encpt));
         printf("Decrypted Value:\n%s", decpt);
+        free(decpt);
         break;
       
       //Default: will terminate program if "choose" is not in Menu

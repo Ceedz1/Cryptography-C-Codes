@@ -106,6 +106,8 @@ int main(){
         printf("Press any key to continue...");
         getch();
         system("cls");
+        free(decrypt);
+        break;
       default:
         break;
     }

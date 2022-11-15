@@ -1,144 +1,78 @@
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
  
-void cipher(int i, int c);
-int findMin();
-void makeArray(int, int);
+void rowtrans(char pad[10][10]);
+int row,col,i,j;
+char pad[10][10];
  
-char arr[22][22], darr[22][22], emessage[111], retmessage[111], key[55];
-char temp[55], temp2[55];
-int k = 0;
- 
-int main() {
-    char *message, *dmessage;
- 
-    int i, j, klen, emlen, flag = 0;
-    int r, c, index, min, rows;
- 
-    printf("Enetr the key\n");
-    fflush(stdin);
-    gets(key);
- 
-    printf("\nEnter message to be ciphered\n");
-    fflush(stdin);
-    gets(message);
- 
-    strcpy(temp, key);
-    klen = strlen(key);
- 
-    k = 0;
-    for (i = 0;; i++) {
-        if (flag == 1)
-            break;
- 
-        for (j = 0; key[j] != NULL; j++) {
-            if (message[k] == NULL) {
-                flag = 1;
-                arr[i][j] = '-';
-            } else {
-                arr[i][j] = message[k++];
+void main(){
+    int ch=0,l=0;
+    char plaintext[100];
+
+    system("cls");
+    printf("Enter the plain text: ");
+    gets(plaintext);
+    printf("Enter no of rows and column = ");
+    scanf("%d",&row);
+    scanf("%d",&col);
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            if(plaintext[l]!='\0'){
+                if(plaintext[l]==' ')
+                    l++;
+                    pad[i][j]=plaintext[l];
+                    l++;
+            }
+            else{ 
+                break; 
             }
         }
     }
-    r = i;
-    c = j;
- 
-    for (i = 0; i < r; i++) {
-        for (j = 0; j < c; j++) {
-            printf("%c ", arr[i][j]);
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c ",pad[i][j]);
         }
         printf("\n");
     }
- 
-    k = 0;
- 
-    for (i = 0; i < klen; i++) {
-        index = findMin();
-        cipher(index, r);
-    }
- 
-    emessage[k] = '\0';
-    printf("\nEncrypted message is\n");
-    for (i = 0; emessage[i] != NULL; i++)
-        printf("%c", emessage[i]);
- 
-    printf("\n\n");
-    //deciphering
- 
-    emlen = strlen(emessage);
-    //emlen is length of encrypted message
- 
-    strcpy(temp, key);
- 
-    rows = emlen / klen;
-    //rows is no of row of the array to made from ciphered message
-    rows;
-    j = 0;
- 
-    for (i = 0, k = 1; emessage[i] != NULL; i++, k++) {
-        //printf("\nEmlen=%d",emlen);
-        temp2[j++] = emessage[i];
-        if ((k % rows) == 0) {
-            temp2[j] = '\0';
-            index = findMin();
-            makeArray(index, rows);
-            j = 0;
-        }
-    }
- 
-    printf("\nArray Retrieved is\n");
- 
-    k = 0;
-    for (i = 0; i < r; i++) {
-        for (j = 0; j < c; j++) {
-            printf("%c ", darr[i][j]);
-            //retrieving message
-            retmessage[k++] = darr[i][j];
- 
-        }
-        printf("\n");
-    }
-    retmessage[k] = '\0';
- 
-    printf("\nMessage retrieved is\n");
- 
-    for (i = 0; retmessage[i] != NULL; i++)
-        printf("%c", retmessage[i]);
- 
+
+    rowtrans(pad);
     getch();
-    return (0);
 }
- 
-void cipher(int i, int r) {
-    int j;
-    for (j = 0; j < r; j++) {
-        {
-            emessage[k++] = arr[j][i];
+
+void rowtrans(char pad[10][10]){
+    int l=0,k[10],u;
+    char c[10][10],x[10][10];
+
+    printf("Enter the key to arrange 1 to %d row =\n",row);
+    for(i=0;i<row;i++)
+        scanf("%d",&k[i]);
+
+    printf("\n**********Encryption**********\n");
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            u=k[l]-1;
+            c[i][j]=pad[u][j];
+        }
+        l++;
+    }
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c ",c[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("Cipher Text = ");
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c",c[i][j]);
         }
     }
-    // emessage[k]='\0';
-}
- 
-void makeArray(int col, int row) {
-    int i, j;
- 
-    for (i = 0; i < row; i++) {
-        darr[i][col] = temp2[i];
-    }
-}
- 
-int findMin() {
-    int i, j, min, index;
- 
-    min = temp[0];
-    index = 0;
-    for (j = 0; temp[j] != NULL; j++) {
-        if (temp[j] < min) {
-            min = temp[j];
-            index = j;
-        }
-    }
- 
-    temp[index] = 123;
-    return (index);
 }
