@@ -1,78 +1,87 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <conio.h>
- 
-void rowtrans(char pad[10][10]);
-int row,col,i,j;
-char pad[10][10];
- 
-void main(){
-    int ch=0,l=0;
-    char plaintext[100];
+#include<stdio.h>
 
-    system("cls");
-    printf("Enter the plain text: ");
-    gets(plaintext);
-    printf("Enter no of rows and column = ");
-    scanf("%d",&row);
-    scanf("%d",&col);
+int check(int x,int y){
+    int a,b,c;
 
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            if(plaintext[l]!='\0'){
-                if(plaintext[l]==' ')
-                    l++;
-                    pad[i][j]=plaintext[l];
-                    l++;
-            }
-            else{ 
-                break; 
-            }
-        }
-    }
+    if(x%y==0)
+    return 0;
 
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            printf("%c ",pad[i][j]);
-        }
-        printf("\n");
-    }
-
-    rowtrans(pad);
-    getch();
+    a=x/y;
+    b=y*(a+1);
+    c=b-x;
+    return c;
 }
 
-void rowtrans(char pad[10][10]){
-    int l=0,k[10],u;
-    char c[10][10],x[10][10];
+void main(){
+    int l1,i,d,j;
 
-    printf("Enter the key to arrange 1 to %d row =\n",row);
-    for(i=0;i<row;i++)
-        scanf("%d",&k[i]);
-
-    printf("\n**********Encryption**********\n");
-
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            u=k[l]-1;
-            c[i][j]=pad[u][j];
-        }
-        l++;
+    printf("\nEnter the length of the key. ");
+    scanf("%d",&l1);
+    int sequence[l1];
+    printf("\nEnter the sequence key. ");
+    for(i=0;i<l1;++i){
+        scanf("%d",&sequence[i]);
     }
 
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            printf("%c ",c[i][j]);
+    int order[l1];
+    for(i=1;i<=l1;++i){
+        for(j=0;j<l1;++j){
+            if(sequence[j]==i)
+            order[i-1]=j;
         }
-        printf("\n");
     }
 
-    printf("Cipher Text = ");
+    printf("\nEnter the depth. ");
+    scanf("%d",&d);
 
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            printf("%c",c[i][j]);
+    int l2;
+    printf("\nEnter the length of String without spaces . ");
+    scanf("%d",&l2);
+    int temp1=check(l2,l1);
+
+    int r=(l2+temp1)/l1;
+
+    char p[l2+temp1];
+    char p1[r][l1];
+    //char p2[r][l1];
+    if(temp1>0)
+        printf("\nYou need to enter %d bogus characters.So enter total %d characters. ",temp1,(l2+temp1));
+    else
+        printf("\nEnter the string. ");
+
+    for(i=-1;i<(l2+temp1);++i){
+        scanf("%c",&p[i]);
+    }
+    int count=0;
+    while(d>0){
+        count=0;
+
+        for(i=0;i<r;++i){
+            for(j=0;j<l1;++j){
+                p1[i][j]=p[count];
+                count=count+1;
+            }
         }
+
+        printf("\n\n\n");
+        for(i=0;i<r;++i){
+            for(j=0;j<l1;++j){
+                printf("%c ",p1[i][j]);
+            }
+            printf("\n");
+        }
+
+        count=0;
+        for(i=0;i<l1;++i){
+            for(j=0;j<r;++j){
+                p[count]=p1[j][order[i]];
+                count=count+1;
+            }
+        }
+
+        for(i=0;i<(l2+temp1);++i)
+            printf("%c ",p[i]);
+
+            d=d-1;
     }
 }
