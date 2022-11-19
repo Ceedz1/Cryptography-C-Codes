@@ -52,9 +52,8 @@ int main(){
     printf("\n\nMessage Retrieved is:\n\n");
     for(i=0;retMessage[i]!=NULL;i++){
         printf("%c",retMessage[i]);
-    }
-        
-        getch();
+    } 
+    getch();
 
     return(0);
 }

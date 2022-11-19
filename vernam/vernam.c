@@ -32,6 +32,8 @@ int main(){
                 printf("Enter Plain Text: \n");
                 fflush(stdin);
                 gets(plaintext);
+                int length = strlen(plaintext);
+                printf("Length of key needed: %d\n", length);
                 printf("Enter Key:  \n");
                 fflush(stdin);
                 gets(key);
@@ -70,8 +72,8 @@ char* decptFunc(char encpt[], char key[]){
 char* encptFunc(char plaintext[], char key[]){
     int i, j, k , row, col;
     char *encrypted = calloc(sizeof(plaintext), sizeof(char));
-
-     k=96;
+    
+    k=96;
     for(i = 0; i < 26; i++){
         k++;
         for(j = 0; j < 26; j++){
@@ -91,6 +93,7 @@ char* encptFunc(char plaintext[], char key[]){
     printf("\nEncrypted:\n");
     for(i = 0; encrypted[i] != NULL; i++)
         printf("%c", encrypted[i]);
+
 
     getch();
     system("cls");
