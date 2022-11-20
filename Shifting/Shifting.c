@@ -169,11 +169,9 @@ int main(){
         gets(plaintext);
         printf("Enter shift count: ");
         scanf("%d", &shftCount);
-
         //Initialize array "encrypt" to the return value of "encptFunc"
         strcpy(encrypt, encptFunc(plaintext, shftCount));
         printf("Encrypted Value:\n%s\n\n", encrypt);
-        printf("Press any key to continue...");
         getch();
         system("cls");
         break;
@@ -183,7 +181,6 @@ int main(){
         strcpy(decrypt, decptFunc(encrypt, shftCount));
         system("cls");
         printf("Decrypted Value:\n%s\n\n", decrypt);
-        printf("Press any key to continue...");
         getch();
         system("cls");
         free(decrypt);

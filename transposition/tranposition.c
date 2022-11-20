@@ -4,11 +4,15 @@
 #include <ctype.h>
 #include <conio.h>
 
-
+//function prototypes
 void encptFunc(char pad[10][10]);
-void writeFile(char pad[10][10]);
-void readFile();
+void Encrypt(char pad[10][10]);
+void Decrypt(char pad[10][10]);
+void decptFile();
+void encptFile();
+void writeFile();
 
+//Dynamically declared variables
 int row,col,i,j;
 char pad[10][10];
 
@@ -16,64 +20,63 @@ char pad[10][10];
 //MAIN FUNCTION-------------------------------------------
 int main(){
      int choose=0,l=0;
-     char plainText[100], encpt[100], decpt[100];
-
-     printf("\nEnter Plain Text:\n");
-     gets(plainText);
-     printf("Enter no. of rows:");
-     scanf("%d", &row);
-     printf("Enter no. of columns:");
-     scanf("%d", &col);
-
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-            if(plainText[l]!='\0'){
-                if(plainText[l]==' ')
-                    l++;
-                    pad[i][j]=plainText[l];
-                    l++;
-            }
-            else{ 
-                break; 
-            }
-        }
-    }
-
-    // for(i=0;i<row;i++){
-    //     for(j=0;j<col;j++){
-    //         printf("%c ",pad[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+     char plaintext[100], encpt[100], decpt[100], key[10];
 
     do{
         printf("\n\nTransposition Cipher\n");
         printf("========================\n");
         printf("[0] Exit\n");
-        printf("[1] Encrypt\n");
+        printf("[1] Encrypt & Decrypt\n");
+        printf("------------------------\n");
         printf("[2] Write to file\n");      //we store text to be encryptaed to file
-        printf("[3] Read from file\n");     //access the file containing plain text
+        printf("[3] Encrypt File\n");
+        printf("[4] Decrypt File\n");     
         printf("========================\n");
 
         printf("Select Operation:");
         scanf("%d", &choose);
 
         switch(choose){
-        // case 1:
-        //     system("cls");
-        //     encptFunc(pad);
-        //     getch();
-        //     break;
-        case 2:
-            system("cls");
-            writeFile(pad);
+        case 1:
+            printf("\nEnter Plain Text:\n");
+            fflush(stdin);
+            gets(plaintext);
+            printf("Enter no. of rows:");
+            scanf("%d", &row);
+            printf("Enter no. of columns:");
+            scanf("%d", &col);
+
+            //forms the string into matrix form
+            for(i=0;i<row;i++){
+                for(j=0;j<col;j++){
+                    if(plaintext[l]!='\0'){
+                        if(plaintext[l]==' ')
+                        l++;
+                        pad[i][j]=plaintext[l];
+                        l++;
+                    }else{ 
+                        break; 
+                    }
+                }
+            }
+
+            encptFunc(pad);
             getch();
+            system("cls");
+            break;
+        case 2:
+            writeFile();
+            system("cls");
             break;
         case 3:
-            system("cls");
-            readFile(pad);
+            encptFile();
             getch();
+            system("cls");
             break;
+        case 4:
+            decptFile();
+            getch();
+            system("cls");
         default:
             break;
         }
@@ -82,23 +85,78 @@ int main(){
     return 0;
 }
 
+//Get Key Function---------------------------------------
+int *getKey(){
+    int *key = calloc(sizeof(key), sizeof(int));
 
-//Write to File Function-----------------------------------------
-void writeFile(char pad[10][10]){
-    int l=0,k[10],u;
-    char encrypted[10][10],decrypted[10][10];
-    char ch, encryptVal[100];
+    printf("\nEnter key sequence:\n", row);
+    for(i = 0; i < row; i++){
+        scanf("%d",&key[i]);
+    }  
+    return key;
+}
 
+
+//store plain text to file----------------------------
+void writeFile(){
+    char plaintext[100];
+    FILE *fptr = fopen("cipher.txt", "w");
+
+    printf("\nEnter Plain Text:\n");
+    fflush(stdin);
+    scanf("%[^\n]s", plaintext);
+    fputs(plaintext, fptr);
+    fclose(fptr);
+
+    // getch();
+}
+
+//Copy Plaintext to Matrix--------------------------
+void encptFile(){
+    char pad[10][10], plaintext[100];
+    int l = 0;
+
+    FILE *fptr = fopen("cipher.txt", "r");
+    fgets(plaintext, 100, fptr);
+
+    printf("Enter no. of rows:");
+    scanf("%d", &row);
+    printf("Enter no. of columns:");
+    scanf("%d", &col);
+
+    //forms the string into matrix form
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            if(plaintext[l]!='\0'){
+                if(plaintext[l]==' ')
+                l++;
+                pad[i][j]=plaintext[l];
+                l++;
+            }else{ 
+                break; 
+            }
+        }
+    }
+    fclose(fptr);
+    Encrypt(pad);
     
-    printf("\nEnter key sequence:\n",row);
-    for(i=0;i<row;i++)
-        scanf("%d",&k[i]);
+}
+
+//Encrypt Operation-----------------------------------------------
+void Encrypt(char pad[10][10]){
+    char encrypted[10][10];
+    char plaintext[100], encryptVal[100];
+    int u = 0, l = 0;
     
+    FILE *fptr;
+
+    int *key = getKey();
+
     printf("\nEncrypted\n");
     printf("========================\n");
     for(i=0;i<row;i++){
         for(j=0;j<col;j++){
-            u=k[l]-1;
+            u=key[l]-1;
             encrypted[i][j]=pad[u][j];
         }
         l++;
@@ -110,12 +168,12 @@ void writeFile(char pad[10][10]){
         }
         printf("\n");
     }
+    
+    fptr = fopen("cipher.txt", "w");
 
-    printf("Cipher Text: ");
-    FILE *fptr = fopen("encryptVal.txt", "w");
-
+    printf("Encrypted Text: ");
     for(i = 0, u = 0; i < row; i++){
-        for(j=0;j<col;j++){
+        for(j = 0; j < col; j++){
             printf("%c", encrypted[i][j]);
 
             if(isgraph(encrypted[i][j])){   
@@ -124,57 +182,58 @@ void writeFile(char pad[10][10]){
             }    
         }
     }
-    encryptVal[u] = '\0';//after loop encryptVal now is at the EOF
-    fprintf(fptr, "%s", encryptVal);
+    encryptVal[u] = '\0';
+    fputs(encryptVal, fptr);
+    printf("\n========================\n");
     fclose(fptr);
+
 }
 
 
-//Read from File Function (decrypt)-----------------------------------------
-void readFile(){
-    int l=0,k[10], u = 0;
-    char encrypted[10][10],decrypted[10][10];
-    char ch, buffer[150];
 
-    FILE *fptr;
-    fptr = fopen("encryptVal.txt", "r");
+//Copy Encrypted File to Matrix---------------------------------------------
+void decptFile(){
     
-    // while(fgets(buffer, 150, fptr)){
-    //     strcpy(encrypted[u], buffer);
-    //     printf("Line %d: %s", u, encrypted[u]);
-    //     u++;
-    // } 
-     
-    for(i = 0; i < row; i++){
-        for(j = 0; j < col; j++){
-            ch = fgetc(fptr);
-            if (feof(fptr)){
-                break ;
+    char pad[10][10], encrypted[100];
+    int l = 0;
+
+    FILE *fptr = fopen("cipher.txt", "r");
+    fgets(encrypted, 100, fptr);
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            if(encrypted[l]!='\0'){
+                if(encrypted[l]==' ')
+                l++;
+                pad[i][j]=encrypted[l];
+                l++;
+            }else{ 
+                break; 
             }
-            printf("%c", ch);
-            encrypted[i][j]=ch;  
-             
         }
-           
     }
-    
+    fclose(fptr);
+    Decrypt(pad); 
+}
+
+//Decrypt Operation-----------------------------------------------
+void Decrypt(char pad[10][10]){
+    int l,u;
+    char encrypted[10][10],decrypted[10][10], encryptedVal[100];
+    // printf("%s", encrypted);
+    int *key = getKey();
+
     printf("\nDecrypted\n");
     printf("========================\n");
     l=0;
-    printf("1");
     for(i=0;i<row;i++){
-        printf("2");
         for(j=0;j<col;j++){
-            printf("3");
-            u=k[l]-1;
-            decrypted[u][j]=encrypted[i][j];
-            printf("%c", decrypted[u][j]);
-            printf("%c", encrypted[i][j]);
+            u=key[l]-1;
+            decrypted[u][j]=pad[i][j];
         }
-        printf("4");
         l++;
     }
-    printf("5");
+
     for(i=0;i<row;i++){
         for(j=0;j<col;j++){
             printf("%c ",decrypted[i][j]);
@@ -182,78 +241,80 @@ void readFile(){
         printf("\n");
     }
 
-    printf("Plain Text = "); 
-    for(i = 0; i < row; i++){
-        for(j = 0; j < col; j++){
+    printf("Decrypted Text: ");
+
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
             printf("%c",decrypted[i][j]);
         }
-    } 
-    printf("\n========================\n");   
-    fclose(fptr);
+    }
+    printf("\n========================\n");
 }
 
 
-//ENCRYPT FUNCTION------------------------------------
-// void encptFunc(char pad[10][10]){
-//     int l=0,k[10],u;
-//     char encrypted[10][10],decrypted[10][10];
 
-//     printf("\nEnter key sequence:\n", row);
-//     for(i = 0; i < row; i++)
-//         scanf("%d",&k[i]);
+
+//ENCRYPT FUNCTION (No File Handling)------------------------------------
+void encptFunc(char pad[10][10]){
+    int l=0,key[10],u;
+    char encrypted[10][10],decrypted[10][10];
+
+    printf("\nEnter key sequence:\n", row);
+    for(i = 0; i < row; i++)
+        scanf("%d",&key[i]);
     
-//     printf("\nEncrypted\n");
-//     printf("========================\n");
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             u=k[l]-1;
-//             encrypted[i][j]=pad[u][j];
-//         }
-//         l++;
-//     }
+    printf("\nEncrypted\n");
+    printf("========================\n");
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            u=key[l]-1;
+            encrypted[i][j]=pad[u][j];
+        }
+        l++;
+    }
 
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             printf("%c ",encrypted[i][j]);
-//         }
-//         printf("\n");
-//     }
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c ",encrypted[i][j]);
+        }
+        printf("\n");
+    }
     
-//     printf("Cipher Text: ");
+    printf("Cipher Text: ");
     
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             printf("%c",encrypted[i][j]);
-//         }
-//     }
-//     printf("\n========================\n");
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c",encrypted[i][j]);
+        }
+    }
+    printf("\n========================\n");
 
-//     printf("\nDecrypted\n");
-//     printf("========================\n");
-//     l=0;
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             u=k[l]-1;
-//             decrypted[u][j]=encrypted[i][j];
-//         }
-//         l++;
-//     }
+    printf("\nDecrypted\n");
+    printf("========================\n");
+    l=0;
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            u=key[l]-1;
+            decrypted[u][j]=encrypted[i][j];
+        }
+        l++;
+    }
 
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             printf("%c ",decrypted[i][j]);
-//         }
-//         printf("\n");
-//     }
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c ",decrypted[i][j]);
+        }
+        printf("\n");
+    }
 
-//     printf("Plain Text = ");
+    printf("Plain Text = ");
 
-//     for(i=0;i<row;i++){
-//         for(j=0;j<col;j++){
-//             printf("%c",decrypted[i][j]);
-//         }
-//     }
-//     printf("\n========================\n");
-// }
+    for(i=0;i<row;i++){
+        for(j=0;j<col;j++){
+            printf("%c",decrypted[i][j]);
+        }
+    }
+    printf("\n========================\n");
+}
 
 
