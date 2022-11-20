@@ -3,8 +3,9 @@
 #include <string.h>
 #include <conio.h>
 
-//Encrypt Function-------------------------------------------------------------
+char plaintext[100];
 
+//Encrypt Function-------------------------------------------------------------
 char* funcEncpt(char plaintext[]){
   int i, a;
   char ch;
@@ -16,10 +17,17 @@ char* funcEncpt(char plaintext[]){
 
   //convert to ascii value
   for(i = 0; i < strlen(plaintext); i++){
-    a=plaintext[i];
-    a=91-(a-64);
-    ch=a;
-    encrypted[i] = ch;
+    if(isupper(plaintext[i])){
+      a=plaintext[i];
+      a=91-(a-64);
+      ch=a;
+      encrypted[i] = ch;
+    }else if(islower(plaintext[i])){
+      a=plaintext[i];
+      a=123-(a-96);
+      ch=a;
+      encrypted[i] = ch;
+    }
   }
   
   //return decrypted value
@@ -27,7 +35,6 @@ char* funcEncpt(char plaintext[]){
 }
 
 //Decrypt Function-------------------------------------------------------------
-
 char* funcDecpt(char encpt[]){
   int i, a;
   char ch;
@@ -37,20 +44,99 @@ char* funcDecpt(char encpt[]){
 
   //convert to ascii value
   for(i = 0; i < strlen(encpt); i++){
-    a=encpt[i];
-    a=91-(a-64);
-    ch=a;
-    decrypted[i] = ch;
+    if(isupper(encpt[i])){
+      a=encpt[i];
+      a=91-(a-64);
+      ch=a;
+      decrypted[i] = ch;
+    }else if(islower(encpt[i])){
+      a=encpt[i];
+      a=123-(a-96);
+      ch=a;
+      decrypted[i] = ch;
+    }
   }
 
   //return decrypted value
   return decrypted;
 }
 
-//Main Function-------------------------------------------------------------
+void writeFile(){
+  FILE *fptr = fopen("cipher.txt", "w");
+  
+  printf("\nPlease use UPPERCASE");
+  printf("\nEnter Plain text:\n");
+  fflush(stdin);
+  gets(plaintext);
+  fputs(plaintext, fptr);
+  fclose(fptr);
 
+}
+
+void encptFile(){
+  int i, a;
+  char ch, encrypted[100];
+
+  FILE *fptr = fopen("cipher.txt", "r");
+  fgets(plaintext, 100, fptr);
+  
+
+  for(i = 0; i < strlen(plaintext); i++){
+    if(isupper(plaintext[i])){
+      a=plaintext[i];
+      a=91-(a-64);
+      ch=a;
+      encrypted[i] = ch;
+    }else if(islower(plaintext[i])){
+      a=plaintext[i];
+      a=123-(a-96);
+      ch=a;
+      encrypted[i] = ch;
+    }
+    
+  }
+  printf("Current File Value: %s", plaintext);
+  printf("\nEncrypted Value: %s", encrypted);
+  fclose(fptr);
+
+  fptr = fopen("cipher.txt", "w");
+  fputs(encrypted, fptr);
+  fclose(fptr);
+  getch();
+  
+}
+
+void decptFile(){
+  int i, a;
+  char ch, encpt[100], decrypted[100];
+
+  FILE *fptr = fopen("cipher.txt", "r");
+  fgets(encpt, 100, fptr);
+
+  //convert to ascii value
+  for(i = 0; i < strlen(encpt); i++){
+    if(isupper(encpt[i])){
+      a=encpt[i];
+      a=91-(a-64);
+      ch=a;
+      decrypted[i] = ch;
+    }else if(islower(encpt[i])){
+      a=encpt[i];
+      a=123-(a-96);
+      ch=a;
+      decrypted[i] = ch;
+    }
+  } 
+
+  printf("Current File Value: %s", encpt);
+  printf("\nDecrypted Value: %s", decrypted);
+  fclose(fptr);
+  getch();
+}
+
+//Main Function-------------------------------------------------------------
 int main(){
-  char plaintext[100], encpt[100], decpt[100];
+  char encpt[100], decpt[100];
   int choose;
 
   //Main Operation Menu
@@ -60,6 +146,10 @@ int main(){
     printf("[0] Exit\n");
     printf("[1] Encrypt\n");
     printf("[2] Decrypt\n");
+    printf("-----------------\n");
+    printf("[3] Write to File\n");
+    printf("[4] Encrypt File\n");
+    printf("[5] Decrypt File\n");
     printf("=================\n");
 
     //Initialize "choose" by selecting from Main Operation Menu
@@ -70,12 +160,14 @@ int main(){
     switch(choose) {
       //Case 1: Will send "plaintext" to "funcEncpt"
       case 1:
-        fflush(stdin);
         printf("\nPlease use UPPERCASE");
         printf("\nEnter Plain text:\n");
+        fflush(stdin);
         gets(plaintext);
         strcpy(encpt, funcEncpt(plaintext));
         printf("Encrypted Value:\n%s", encpt);
+        getch();
+        system("cls");
         break;
 
       //Case 2: Will send "encpt" to "funcDecpt"
@@ -84,6 +176,23 @@ int main(){
         strcpy(decpt, funcEncpt(encpt));
         printf("Decrypted Value:\n%s", decpt);
         free(decpt);
+        getch();
+        system("cls");
+        break;
+      //Case 3: write plain text to file
+      case 3: 
+        writeFile();
+        system("cls");
+        break;
+      //Case 4: Encrypt text file
+      case 4:
+        encptFile();
+        system("cls");
+        break;
+      //Case 5; Decrypt text file
+      case 5:
+        decptFile();
+        system("cls");
         break;
       
       //Default: will terminate program if "choose" is not in Menu
@@ -94,3 +203,4 @@ int main(){
 
   return 0;
 }
+

@@ -72,7 +72,8 @@ char* decptFunc(char encpt[], char key[]){
 char* encptFunc(char plaintext[], char key[]){
     int i, j, k , row, col;
     char *encrypted = calloc(sizeof(plaintext), sizeof(char));
-    
+
+    //
     k=96;
     for(i = 0; i < 26; i++){
         k++;
@@ -81,7 +82,7 @@ char* encptFunc(char plaintext[], char key[]){
             if(k==123)
                 k=97;
         }
-    }
+    } 
 
     for(i = 0; key[i] != NULL; i++){
         col = findRow(key[i]);
