@@ -15,7 +15,7 @@ char* funcEncpt(char plaintext[]){
   //dynamically allocating "encrypted"
   char* encrypted = malloc(sizeof(encrypted)*sizeof(char*));
 
-  //convert to ascii value
+  //traverse the ASCII value of A - Z
   for(i = 0; i < strlen(plaintext); i++){
     if(isupper(plaintext[i])){
       a=plaintext[i];
@@ -42,7 +42,7 @@ char* funcDecpt(char encpt[]){
   //dynamically allocating "decrypted"
   char* decrypted = malloc(sizeof(decrypted)*sizeof(char*));
 
-  //convert to ascii value
+  //traverse the ASCII value of A - Z
   for(i = 0; i < strlen(encpt); i++){
     if(isupper(encpt[i])){
       a=encpt[i];
@@ -76,13 +76,15 @@ void writeFile(){
 void encptFile(){
   int i, a;
   char ch, encrypted[100];
-
+  //opens file stream
   FILE *fptr = fopen("cipher.txt", "r");
   fgets(plaintext, 100, fptr);
   
-
+  //traverse the ASCII value of A - Z 
   for(i = 0; i < strlen(plaintext); i++){
+    //if string is UPPERCASE 
     if(isupper(plaintext[i])){
+      //"a" holds a charcter value of "plaintext"
       a=plaintext[i];
       a=91-(a-64);
       ch=a;
@@ -103,23 +105,26 @@ void encptFile(){
   fputs(encrypted, fptr);
   fclose(fptr);
   getch();
-  
 }
 
+
+//Decrypt File Value
 void decptFile(){
   int i, a;
   char ch, encpt[100], decrypted[100];
-
+  //opens file stream
   FILE *fptr = fopen("cipher.txt", "r");
   fgets(encpt, 100, fptr);
 
-  //convert to ascii value
   for(i = 0; i < strlen(encpt); i++){
+    //if string is UPPERCASE 
     if(isupper(encpt[i])){
+      //"a" holds a charcter value of "encpt"
       a=encpt[i];
       a=91-(a-64);
       ch=a;
       decrypted[i] = ch;
+    //if string is LOWERCASE
     }else if(islower(encpt[i])){
       a=encpt[i];
       a=123-(a-96);
@@ -127,8 +132,9 @@ void decptFile(){
       decrypted[i] = ch;
     }
   } 
-
+  //prints the current value of file (cipher)
   printf("Current File Value: %s", encpt);
+  //prints the decrypted value of file
   printf("\nDecrypted Value: %s", decrypted);
   fclose(fptr);
   getch();
@@ -141,7 +147,7 @@ int main(){
 
   //Main Operation Menu
   do{
-    printf("\n\nAtbash Cipher\n");
+    printf("\n\nAtbash Cipher\n");                            
     printf("=================\n");
     printf("[0] Exit\n");
     printf("[1] Encrypt\n");
