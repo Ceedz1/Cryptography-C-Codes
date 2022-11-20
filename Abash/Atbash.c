@@ -61,6 +61,8 @@ char* funcDecpt(char encpt[]){
   return decrypted;
 }
 
+
+//Write to a File----------------------------
 void writeFile(){
   FILE *fptr = fopen("cipher.txt", "w");
   
@@ -73,6 +75,8 @@ void writeFile(){
 
 }
 
+
+//Encrypt File--------------------------------- 
 void encptFile(){
   int i, a;
   char ch, encrypted[100];
@@ -108,7 +112,7 @@ void encptFile(){
 }
 
 
-//Decrypt File Value
+//Decrypt File Value--------------------------
 void decptFile(){
   int i, a;
   char ch, encpt[100], decrypted[100];
