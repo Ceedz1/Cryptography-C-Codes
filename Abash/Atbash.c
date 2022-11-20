@@ -101,10 +101,11 @@ void encptFile(){
     }
     
   }
+  //plrints plaintext and encrypted value
   printf("Current File Value: %s", plaintext);
   printf("\nEncrypted Value: %s", encrypted);
   fclose(fptr);
-
+  //store encrypted value back to file
   fptr = fopen("cipher.txt", "w");
   fputs(encrypted, fptr);
   fclose(fptr);
