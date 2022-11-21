@@ -9,6 +9,7 @@ void ce();
 long int cd(long int); 
 void encrypt(); 
 void decrypt(); 
+
 int main() 
 { 
     printf("\nENTER FIRST PRIME NUMBER\n"); 
@@ -27,7 +28,7 @@ int main()
         printf("\nWRONG INPUT\n"); 
         exit(1); 
     } 
-    
+
     printf("\nENTER MESSAGE\n"); 
     fflush(stdin); 
     scanf("%s",msg); 
