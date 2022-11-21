@@ -12,8 +12,8 @@ char* encptFunc(char plaintext[], int shftCount){
     //Dynamically Allocating "encrypted"
     char *encrypted = calloc(strlen(plaintext), sizeof(char));
 
-    //SHIFTING
-    for(i = 0; i < strlen(plaintext); i++){
+    
+    for(i = 0; i < strlen(plaintext); i++){       //SHIFTING operation by shifting ascii value of character accodring to shift count
       if(isalnum(plaintext[i])){
         if(islower(plaintext[i])){
           encrypted[i] = (plaintext[i] - 'a' + shftCount) % 26 + 'a';
@@ -39,7 +39,7 @@ char* decptFunc(char encrypt[], int shftCount){
     char *decrypted = calloc(strlen(encrypt), sizeof(char));
 
     //SHIFTING
-    for(i = 0; i < strlen(encrypt); i++){
+    for(i = 0; i < strlen(encrypt); i++){          //SHIFTING operation by shifting ascii value of character accodring to shift count
       if(isalnum(encrypt[i])){
         if(islower(encrypt[i])){
           decrypted[i] = (encrypt[i] - 'a' - shftCount) % 26 + 'a';
@@ -73,14 +73,14 @@ int encptFile(){
   int i, shftCount;
   char plaintext[100], encrypted[100];
 
-  FILE *fptr = fopen("cipher.txt", "r");
+  FILE *fptr = fopen("cipher.txt", "r");      //reading file and copying value to variable 'plainttext'
   fgets(plaintext, 100, fptr);
 
-  printf("Enter shift count: ");
+  printf("Enter shift count: ");      //enter number of shift
   fflush(stdin);
   scanf("%d", &shftCount);
 
-  for(i = 0; i < strlen(plaintext); i++){
+  for(i = 0; i < strlen(plaintext); i++){      //SHIFTING operation by shifting ascii value of character accodring to shift count
       if(isalnum(plaintext[i])){
         if(islower(plaintext[i])){
           encrypted[i] = (plaintext[i] - 'a' + shftCount) % 26 + 'a';
@@ -95,10 +95,10 @@ int encptFile(){
     }
   fclose(fptr);
 
-  fptr = fopen("cipher.txt", "w");
+  fptr = fopen("cipher.txt", "w");        //store encrypted value back to file
 
-  printf("\nPlain Text: %s", plaintext);
-  printf("\nEncrypted: %s", encrypted);
+  printf("\nPlain Text: %s", plaintext);    //prints plaintext and encrypted value
+  printf("\nEncrypted: %s", encrypted);     
   fputs(encrypted, fptr);
   fclose(fptr);
   getch();
@@ -110,10 +110,10 @@ void decptFile(int shftCount){
   int i;
   char encrypted[100], decrypted[100];
 
-  FILE *fptr = fopen("cipher.txt", "r");
+  FILE *fptr = fopen("cipher.txt", "r");        //reading file and copying encrypted value to 'encrypted'
   fgets(encrypted, 100, fptr);
 
-  for(i = 0; i < strlen(encrypted); i++){
+  for(i = 0; i < strlen(encrypted); i++){         //SHIFTING operation by shifting ascii value of character accodring to shift count
       if(isalnum(encrypted[i])){
         if(islower(encrypted[i])){
           decrypted[i] = (encrypted[i] - 'a' - shftCount) % 26 + 'a';
@@ -126,7 +126,7 @@ void decptFile(int shftCount){
         }
       }
     }
-  printf("\nEncrypted Text: %s", encrypted);
+  printf("\nEncrypted Text: %s", encrypted);      //prints encrypted and decrypted value
   printf("\nDecrypted Text: %s", decrypted);
   fclose(fptr);
   getch();
